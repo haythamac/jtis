@@ -1,0 +1,2 @@
+1. PDF Renderer Library: In your code, you set the PDF renderer library to TCPDF, which requires the tecnickcom/tcpdf package. Make sure you have installed this package using Composer before using it. You can install it by running the following command in your project directory:
+- composer require tecnickcom/tcpdf

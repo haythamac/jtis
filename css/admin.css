@@ -1,0 +1,301 @@
+.navbar-header{
+    display: flex nowrap;
+    
+}
+
+#myhead2{
+    display: inline-block;
+    margin: 0;
+}
+.search-container{
+	width: 100%;
+	margin: 0 20px;
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+.form-control{
+	width: 500px;
+    justify-self: flex-end;
+}
+.custom-search-btn{
+	margin-right: 20px; 
+    border-radius: 0 !important;
+}
+.container-fluid{
+    padding:0 !important;
+}
+#sidebar{
+    height: 100vh !important;
+    background: #285430 !important;
+    padding: 0px !important;
+    overflow-x: hidden;
+}
+.sidebar-list{
+    padding: 0 20px  0 0 !important;
+    text-indent: 20px;
+}
+.sidebar-list a{
+    text-indent: 40px;
+}
+.sidebar-list , li
+{
+    background: #285430 !important;
+    font-size: 14px
+}
+.sidebar-list li{
+    border-bottom: 1px solid white !important;
+    padding: 10px 10px 5px 10px;
+    text-transform: uppercase;
+    font-size: 18px;
+    text-indent: 10px;
+}
+    .sidebar-list li:hover
+    {
+        background: #1e3f24 !important;
+    }
+     .sidebar-list li 
+     {
+        color:white !important;
+        text-decoration: none;
+     }
+     .sidebar-list li a:hover{
+        background-color: transparent !important;
+     }
+     .card-label{
+        padding: 10px 30px;
+        background: #285430 !important;
+        color: white;
+     }
+     .mytable1 .card
+     {
+     background: #5f2c82;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #49a09d, #5f2c82);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #49a09d, #5f2c82); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        width: 100%;
+        padding: 10px;
+     }
+
+     .mytable2 .card
+     {
+      background: #EC6F66;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #F3A183, #EC6F66);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #F3A183, #EC6F66); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+width: 100%;
+padding: 10px;
+     }
+     .card 
+     {
+        height: 100% ;
+        width: 100% ;
+      overflow: hidden;
+      transition: all 0.9s ease;
+     }
+     .card:hover
+     {
+     
+      transform: scale(1.04);
+     }
+#manageyoursection{
+    padding: 10px;
+}
+.manage{
+   cursor:pointer;
+    height: 300px;
+    padding: 5px;
+
+}
+.manage .fa{
+    font-size: 20px;
+}
+#manageyourlesson{
+    background: url("../img/sciless.jpg") !important;
+    background-size: cover !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+#manageyourvid{
+    background: url("../img/Video1.jpg");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+#manageyourquiz{
+    background: url("../img/work5.png");
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-weight: 1000px;
+}
+.card-body{
+    height:100%;
+    width: 100%;
+    padding: 10px 30px;
+    background: #285430 !important;
+    color: white;
+}
+card-title{
+    height:100%;
+    width: 100%;
+}
+table, thead, tbody, tr{
+    width: 100% !important;
+}
+table{
+    overflow-y: scroll;
+}
+table .user-list-table{
+    overflow-y: scroll; 
+    max-height: 600px;
+}
+.headerdash{
+    margin: 0px !important;
+    padding: 10px !important;
+    text-align: center;
+    background: #285430 !important;
+    color: white;
+    font-size: 30px;
+}
+thead{
+    text-align: center;
+    background: #1e3f24 !important;
+    color: white;
+    font-size: 13px;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+tbody tr:nth-child(even){
+    background: #e0e0e0 !important;
+    color: black;
+
+}
+.active-dash{
+    background: #1e3f24 !important;
+}
+#main-manage-content{
+    height: 100% !important;
+    padding: 10px 10px !important;
+  }
+  #main-manage-content .nav{
+    margin: 10px;
+  }
+  .card-courses{
+
+    height: 70px;
+  }
+.card-img-top{
+    height:100%;
+    width: 100%;
+}
+ /*==============================miancourse tab==============*/
+ #main-managecourse{
+margin-top: 20px !important;
+ }
+ #main-managecourse li{
+    outline: none  !important;
+    border: none !important;
+    margin-right: 5px;
+ }
+ #main-managecourse li:hover{
+    font-size: 10px !important;
+ }
+ .h3{
+    margin: 10px !important;
+ }
+ .nav-tabs>li>a{
+    background: transparent !important;
+}
+.tab-card-header{
+    
+}
+ 
+ .tab-card-header > .nav-tabs > li > a:active{
+   
+
+ }
+ .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
+    background:  #96bd9ed9 !important;
+ }
+.tab-card {
+
+  }
+  .tab-card-header {
+  }
+  /* Default mode */
+  .tab-card-header > .nav-tabs {
+    padding-top: 10px;
+   
+  }
+  .tab-card-header > .nav-tabs > li {
+    margin-right: 3px  !important;
+  }
+  .tab-card-header > .nav-tabs > li > a {
+    
+  }
+  .tab-card-header > .nav-tabs > li > a.show {
+      border-bottom:2px solid #007bff;
+      color: #007bff;
+  }
+  .tab-card-header > .nav-tabs > li > a:hover {
+      
+  }
+  
+  .tab-card-header > .tab-content {
+
+  }
+  .card-transac {
+    font-family: 'Roboto Condensed', sans-serif !important;
+
+   
+  }
+  .card-transac .card-header{
+    background: #1e3f24 !important;
+    padding: 10px;
+    color: white;
+  }
+  .tab-pane .abs {
+    position: absolute;
+    width: 100%;
+    margin-left: 20px;
+   
+    
+  }
+  .card-courses {
+    
+}
+.col-lg-12{
+    margin-bottom: 5px !important;
+}
+#btn-ad a {
+
+    color: white !important;
+}
+#managetopic{
+    margin-top: 10px !important;
+}
+#editor{
+    margin-bottom: 20px !important;
+}
+.editlessonh{
+    font-size: 30px;
+    font-weight: bold;
+}
+.justify-content-center{
+	display: flex;
+	justify-content: center;
+}
+.justify-content-center .form-control{
+	display: flex;
+	justify-content: center !important;
+    width: 300px;
+    margin-bottom: 10px !important;
+}
