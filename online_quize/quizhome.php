@@ -1,5 +1,4 @@
 <?php
-ini_set('display_errors', 0);
 include("class/quizUsers.php"); //including the users class
 
 $profile = new quizUsers; // craeting the object of user class so that we can call show_user_profile() method 

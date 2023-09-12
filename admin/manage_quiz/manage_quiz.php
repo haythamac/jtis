@@ -7,8 +7,8 @@ if (!isAdmin()) {
 }
 
 include("../classes/manage_quiz_class.php");
-$quiz = new manage_quiz_class;      // creating object of  manage_courses_class.php
-$quiz_list = $quiz->display_quiz_courses();   //calling display_courses() method from manage_courses_class.php
+$quiz = new manage_quiz_class; // creating object of  manage_courses_class.php
+$quiz_list = $quiz->display_quiz_courses(); //calling display_courses() method from manage_courses_class.php
 $diff_list = $quiz->display_quiz_difficulty();
 ?>
 
@@ -41,15 +41,16 @@ $diff_list = $quiz->display_quiz_difficulty();
   <link rel="shortcut icon" type="text/css" href="/jtis/img/shortcuticon.svg">
 
   <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
     .table-bordered th,
     .table-bordered td {
-        border: 1px solid black;
-        padding: 8px;
+      border: 1px solid black;
+      padding: 8px;
     }
-</style>
+  </style>
 
   <!----css file link-->
   <link rel="stylesheet" type="text/css" href="/jtis/css/style.css">
@@ -71,7 +72,9 @@ $diff_list = $quiz->display_quiz_difficulty();
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
 
   <style type="text/css">
     .tab-card {
@@ -127,7 +130,7 @@ $diff_list = $quiz->display_quiz_difficulty();
   </div>
 
   <script>
-    $(function() {
+    $(function () {
       $("#nav-placeholder").load("/jtis/admin/nav.html");
     });
   </script>
@@ -167,440 +170,338 @@ $diff_list = $quiz->display_quiz_difficulty();
       <div class="col-md-9 mt-2 pt-2" id="manage-main-content">
         <!-- ========================================================================================================================== -->
 
-        <!-- Nav tabs strats -->
-        <ul class="nav nav-tabs">
-          <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#menu1">Delete Questions</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#menu2">Add Questions</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#menu4">Add Identification Questions </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#menu3">Edit Questions</a>
-          </li>
-        </ul>
-        <!-- Nav tabs ends -->
-
         <!-- ========================================================================================================================== -->
-        <div class="tab-content">
-          <!-- ========================================================================================================================== -->
 
 
-          <!-- ========================================================================================================================== -->
+        <!-- MANAGE QUIZ -->
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <!--  main body content starts -->
+          <div class="col-lg-12">
+            <h3 class="text-center mt-2 editlesson">Manage Quiz</h3><br>
+            <div><span class="clickable-modal" style="cursor: pointer; color: blue;" data-bs-toggle="modal"
+                data-bs-target="#addQuiz">Add quiz</span></div>
+            <table class="table table-striped table-hover shadow table-bordered" id="delete_question">
+
+              <tr class="font-weight-bold">
+                <th>id</th>
+                <th>Quiz name</th>
+                <th>Lesson</th>
+                <th>Difficulty</th>
+                <th>Top student</th>
+                <th colspan="2">Action</th>
+              </tr>
+              <?php
+
+              $con = mysqli_connect('localhost', 'root');
 
 
-          <!-- ========================================================================================================================== -->
-
-          <!-- manage course pane starts -->
-
-          <!-- add questions pane starts -->
-          <div class="tab-pane container active" id="menu1">
-            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-              <!--  main body content starts -->
-              <div class="col-lg-12">
-                <h3 class="text-center mt-2 editlesson">Delete question</h3><br>
-                <table class="table table-striped table-hover shadow table-bordered" id="delete_question">
-
-                  <tr class="font-weight-bold">
-                    <th>id</th>
-                    <th>Topic</th>
-                    <th>Difficulty</th>
-                    <th>Question</th>
-                    <th>Delete</th>
-                  </tr>
-                  <?php
-
-                  $con = mysqli_connect('localhost', 'root');
+              mysqli_select_db($con, 'jtis');
+              $q = "SELECT a.assessment_id, a.name, a.lesson, a.difficulty, u.firstName, u.lastName
+                  FROM assessment AS a
+                  INNER JOIN leaderboard AS l ON a.leaderboard_id = l.leaderboard_id
+                  INNER JOIN user_info AS u ON l.user_id = u.user_id;";
+              $result = mysqli_query($con, $q);
+              while ($res = mysqli_fetch_array($result)) {
 
 
-                  mysqli_select_db($con, 'jtis');
-                  $q = "SELECT qe.id, sc.language_name, qe.difficulty, qe.question 
-                  FROM question_quiz qe
-                  INNER JOIN science_branch sc ON qe.course_id = sc.id";
-                  $result = mysqli_query($con, $q);
-                  while ($res = mysqli_fetch_array($result)) {
+                ?>
+
+                <tr class=" ">
+                  <td>
+                    <?php echo $res['assessment_id']; ?>
+                  </td>
+                  <td>
+                    <?php echo ucfirst($res['name']); ?>
+                  </td>
+                  <td>
+                    <?php echo ucfirst($res['lesson']); ?>
+                  </td>
+                  <td>
+                    <?php echo ucfirst($res['difficulty']); ?>
+                  </td>
+                  <td>
+                    <?php echo ucfirst($res['firstName']) . ' ' . ucfirst($res['lastName']); ?>
+                  </td>
+                  <td><a href="edit_quiz.php">Update</a></td>
+                  <td><a class=" no-gutters text-danger"
+                      href="verify/verify_delete.php?id=<?php echo $res['assessment_id']; ?>"
+                      style="text-decoration: none;">Delete<i class="fa fa-trash-o ml-2" aria-hidden="true"></a></td>
+
+                </tr>
+
+              <?php }
 
 
-                  ?>
-
-                    <tr class=" ">
-                      <td><?php echo $res['id']; ?></td>
-                      <td><?php echo ucfirst($res['language_name']); ?></td>
-                      <td><?php echo ucfirst($res['difficulty']); ?></td>
-                      <td><?php echo ucfirst($res['question']); ?></td>
-
-
-
-                      <td><a class=" no-gutters text-danger" href="verify/verify_delete.php?id=<?php echo $res['id']; ?>" style="text-decoration: none;">Delete<i class="fa fa-trash-o ml-2" aria-hidden="true"></a></td>
-
-                    </tr>
-
-                  <?php }
-
-
-                  ?>
-                </table>
-              </div>
-
-              <div class="col-lg-12">
-                <h3 class="text-center mt-2 editlesson">Delete identification question</h3><br>
-                <table class="table table-striped table-hover shadow table-bordered" id="delete_question_identification">
-
-                  <tr class="font-weight-bold">
-                    <th>id</th>
-                    <th>Topic</th>
-                    <th>Difficulty</th>
-                    <th>Question</th>
-                    <th>Delete</th>
-                  </tr>
-                  <?php
-
-                  $con = mysqli_connect('localhost', 'root');
-
-
-                  mysqli_select_db($con, 'jtis');
-                  $q = "SELECT qe.id, sc.language_name, qe.difficulty, qe.question 
-                  FROM question_quiz_identification qe
-                  INNER JOIN science_branch sc ON qe.course_id = sc.id";
-                  $result = mysqli_query($con, $q);
-                  while ($res = mysqli_fetch_array($result)) {
-
-
-                  ?>
-
-                    <tr class=" ">
-                      <td><?php echo $res['id']; ?></td>
-                      <td><?php echo ucfirst($res['language_name']); ?></td>
-                      <td><?php echo ucfirst($res['difficulty']); ?></td>
-                      <td><?php echo ucfirst($res['question']); ?></td>
-
-
-
-                      <td><a class=" no-gutters text-danger" href="verify/verify_delete_identification.php?id=<?php echo $res['id']; ?>" style="text-decoration: none;">Delete<i class="fa fa-trash-o ml-2" aria-hidden="true"></a></td>
-
-                    </tr>
-
-                  <?php }
-
-                  ?>
-                </table>
-              </div>
-            </div>
+              ?>
+            </table>
           </div>
-          </form>
-        <!-- add questions pane ends -->
-
-
-
-        <!-- manage courses pane ends -->
-
-        <!-- ========================================================================================================================== -->
-
-
-
-
-
-        <!-- ========================================================================================================================== -->
-
-        <!-- add questions pane starts -->
-
-
-
-
-        <div class="tab-pane container fade" id="menu2">
-          <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <h1 class="page-header">Add a new question</h1>
-
-            <?php
-            if (isset($_GET['run']) && !empty($_GET['run'])) {
-              echo "<p>Question added successfully</p>";
-            }
-            ?>
-
-
-            <form method="POST" action="quiz_add.php">
-              <div class="form-group">
-                <label for="text">Question :</label>
-                <input type="text" class="form-control" name="question" placeholder="Enter Question">
-                <small id="emailHelp" class="form-text text-muted">please enter the question.</small>
-              </div>
-
-              <div class="form-group">
-                <label for="text">Option 1 :</label>
-                <input type="text" class="form-control" name="opt1" placeholder="Enter option 1">
-              </div>
-
-              <div class="form-group">
-                <label for="text">Option 2 :</label>
-                <input type="text" class="form-control" name="opt2" placeholder="Enter option 2">
-              </div>
-
-
-              <div class="form-group">
-                <label for="text">Option 3 :</label>
-                <input type="text" class="form-control" name="opt3" placeholder="Enter option 3">
-              </div>
-
-              <div class="form-group">
-                <label for="text">Option 4 :</label>
-                <input type="text" class="form-control" name="opt4" placeholder="Enter option 4">
-              </div>
-
-              <div class="form-group">
-                <label for="text">Answer :</label>
-                <input type="text" class="form-control" name="answer" placeholder="Enter the correct answer">
-              </div>
-
-              <div class="form-group">
-                <label for="quizpleFormControlSelect1">Select Lesson</label>
-                <select class="form-control" id="quizpleFormControlSelect1" name="cat">
-                  <option class="active" selected disabled>Choose Lesson</option>
-                  <?php
-                  foreach ($quiz_list as $courses) {
-                    echo "<option value=" . $courses['id'] . ">" . $courses['language_name'] . "</option>";
-                  }
-                  ?>
-                </select>
-                <label for="quizpleFormControlSelect1">Select Difficulty</label>
-                <select class="form-control" id="quizpleFormControlSelect1" name="diff">
-                  <option class="active" selected disabled>Choose difficulty</option>
-                  <option value="easy">easy</option>
-                  <option value="medium">medium</option>
-                </select>
-              </div>
-
-
-
-
-
-              <button type="submit" name="btn_add_question" class="btn btn-success">CREATE</button>
-            </form>
-
-
-
-          </div>
-
 
         </div>
-        <!-- add questions pane ends -->
-        <!-- ========================================================================================================================== -->
-        <!-- add questions identification pane starts -->
 
-
-
-
-        <div class="tab-pane container fade" id="menu4">
-
-
-
-
-          <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <h1 class="page-header">Add a new identification question</h1>
-
-            <?php
-            if (isset($_GET['run']) && !empty($_GET['run'])) {
-              echo "<p>Question added successfully</p>";
-            }
-            ?>
-
-
-            <form method="POST" action="quiz_add.php">
-              <div class="form-group">
-                <label for="text">Question :</label>
-                <input type="text" class="form-control" name="question_identification" placeholder="Enter Question">
-                <small id="emailHelp" class="form-text text-muted">please enter the question.</small>
-              </div>
-
-              <div class="form-group">
-                <label for="text">Answer :</label>
-                <input type="text" class="form-control" name="answer_identification" placeholder="Enter the correct answer">
-              </div>
-
-              <div class="form-group">
-                <label for="quizpleFormControlSelect1">Select Lesson</label>
-                <select class="form-control" id="quizpleFormControlSelect1" name="cat">
-                  <option class="active" selected disabled>Choose Lesson</option>
-                  <?php
-                  foreach ($quiz_list as $courses) {
-                    echo "<option value=" . $courses['id'] . ">" . $courses['language_name'] . "</option>";
-                  }
-                  ?>
-                </select>
-                <label for="quizpleFormControlSelect1">Select Difficulty</label>
-                <select class="form-control" id="quizpleFormControlSelect1" name="diff_identification">
-                  <option class="active" selected disabled>Choose difficulty</option>
-                  <option value="hard">hard</option>
-                </select>
-              </div>
-
-
-
-
-
-              <button type="submit" name="btn_add_question_identification"class="btn btn-success">CREATE</button>
-            </form>
-
-
-
-          </div>
-
-
-        </div>
-        <!-- add questions identification pane ends -->
-        <!-- ========================================================================================================================== -->
-        <!-- edit questions pane starts -->
-
-
-
-
-        <div class="tab-pane container fade" id="menu3">
-
-
-
-
-          <div class="col-sm-offset-3 main">
-          <div class="col-lg">
-                <h3 class="text-center mt-2 editlesson">Edit question</h3><br>
-                <table class="table table-striped table-hover shadow table-bordered" id="delete_question">
-
-                  <tr class="font-weight-bold">
-                    <th>id</th>
-                    <th>Topic</th>
-                    <th>Difficulty</th>
-                    <th>Question</th>
-                    <th>Choice 1</th>
-                    <th>Choice 2</th>
-                    <th>Choice 3</th>
-                    <th>Choice 4</th>
-                    <th>Answer</th>
-                    <th>Edit</th>
-                  </tr>
-                  <?php
-
-                  $con = mysqli_connect('localhost', 'root');
-
-
-                  mysqli_select_db($con, 'jtis');
-                  $q = "SELECT qe.id, sc.language_name, qe.difficulty, qe.question, qe.opt1, qe.opt2, qe.opt3, qe.opt4, qe.answer
-                  FROM question_quiz qe
-                  INNER JOIN science_branch sc ON qe.course_id = sc.id";
-                  $result = mysqli_query($con, $q);
-                  while ($res = mysqli_fetch_array($result)) {
-                    $res['answer'] = $res['answer'] + 1;
-
-                  ?>
-
-                    <tr class=" ">
-                      <td><?php echo $res['id']; ?></td>
-                      <td><?php echo ucfirst($res['language_name']); ?></td>
-                      <td><?php echo ucfirst($res['difficulty']); ?></td>
-                      <td><?php echo ucfirst($res['question']); ?></td>
-                      <td><?php echo ucfirst($res['opt1']); ?></td>
-                      <td><?php echo ucfirst($res['opt2']); ?></td>
-                      <td><?php echo ucfirst($res['opt3']); ?></td>
-                      <td><?php echo ucfirst($res['opt4']); ?></td>
-                      <td><?php echo 'Choice number '.ucfirst($res['answer']); ?></td>
-
-
-
-                      <td><a class=" no-gutters text-primary" href="verify/verify_changes.php?id=<?php echo $res['id']; ?>" style="text-decoration: none;">Edit<i class="fa fa-trash-o ml-2" aria-hidden="true"></a></td>
-
-                    </tr>
-
-                  <?php }
-
-
-                  ?>
-                </table>
-              </div>
-
-
-
-          </div>
-
-          <div class="col-lg">
-                <h3 class="text-center mt-2 editlesson">Edit identification question</h3><br>
-                <table class="table table-striped table-hover shadow table-bordered" id="delete_question">
-
-                  <tr class="font-weight-bold">
-                    <th>id</th>
-                    <th>Topic</th>
-                    <th>Difficulty</th>
-                    <th>Question</th>
-                    <th>Answer</th>
-                    <th>Edit</th>
-                  </tr>
-                  <?php
-
-                  $con = mysqli_connect('localhost', 'root');
-
-
-                  mysqli_select_db($con, 'jtis');
-                  $q = "SELECT qe.id, sc.language_name, qe.difficulty, qe.question, qe.answer
-                  FROM question_quiz_identification qe
-                  INNER JOIN science_branch sc ON qe.course_id = sc.id";
-                  $result = mysqli_query($con, $q);
-                  while ($res = mysqli_fetch_array($result)) {
-
-                  ?>
-
-                    <tr class=" ">
-                      <td><?php echo $res['id']; ?></td>
-                      <td><?php echo ucfirst($res['language_name']); ?></td>
-                      <td><?php echo ucfirst($res['difficulty']); ?></td>
-                      <td><?php echo ucfirst($res['question']); ?></td>
-                      <td><?php echo $res['answer']; ?></td>
-
-
-
-                      <td><a class=" no-gutters text-primary" href="verify/verify_changes_identification.php?id=<?php echo $res['id']; ?>" style="text-decoration: none;">Edit<i class="fa fa-trash-o ml-2" aria-hidden="true"></a></td>
-
-                    </tr>
-
-                  <?php }
-
-
-                  ?>
-                </table>
-              </div>
-
-
-
-          </div>
-
-
-        </div>
-        </div>
-        <!-- edit questions pane ends -->
-
-        <!-- ========================================================================================================================== -->
       </div>
-
-
-
 
     </div>
 
 
 
+
+  </div>
+
+
+
   </div>
   </div>
 
+  <!-- Add Modal 1 -->
+  <div class="modal fade" id="addQuiz" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true"
+    style="padding: 2rem;">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="width: 602px;height: 452px!important;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ModalLabel" style="color: black; font-size:2rem;">Add quiz</h5>
+          <button type="button" style="border: none; background:none; padding: 0 0.5rem;" data-bs-dismiss="modal"
+            aria-label="Close">&times;</button>
+        </div>
+        <form action="#" method="post" id="firstForm">
+          <div class="modal-body d-flex flex-column align-content-between">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Quiz name" name="quizName" id="quizId"
+                aria-label="quiz" required>
+            </div>
+
+            <div class="form-group">
+              <label for="lessonId">Lesson</label>
+              <select class="form-control" id="lessonId">
+                <?php foreach ($quiz_list as $row) { ?>
+                  <option value="<?php echo $row['id']; ?>"><?php echo $row['language_name']; ?></option>
+                  <?php
+                } ?>
+              </select>
+            </div>
 
 
+            <div class="form-group">
+              <label for="difficultyId">Difficulty</label>
+              <select class="form-control" id="difficultyId">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </div>
 
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
+  <!-- Add Modal 2 -->
+  <div class="modal fade" id="addQuiz2" tabindex="-1" aria-labelledby="ModalLabel2" aria-hidden="true"
+    style="padding: 2rem;">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="width: 602px;height: 712px!important;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ModalLabel2" style="color: black; font-size:2rem;">Question</h5>
+          <button type="button" style="border: none; background:none; padding: 0 0.5rem;" data-bs-dismiss="modal"
+            aria-label="Close">&times;</button>
+        </div>
+        <form action="test.php" method="post" id="secondForm">
+          <div class="modal-body d-flex flex-column align-content-between">
+            <div>
+              <p>Instruction: This is a multiple-choice question. The answer must be the same index (number) as the
+                option you want to be the answer.</p>
+            </div>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Question" name="question" aria-label="Question"
+                required>
+            </div>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Option 1" name="option1" aria-label="Option 1"
+                required>
+            </div>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Option 2" name="option2" aria-label="Option 2"
+                required>
+            </div>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Option 3" name="option3" aria-label="Option 3"
+                required>
+            </div>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Option 4" name="option4" aria-label="Option 4"
+                required>
+            </div>
+            <div class="form-group">
+              <label for="answer">Answer</label>
+              <select class="form-control" id="answer">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </div>
 
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-target="#addQuiz" data-bs-toggle="modal"
+              data-bs-dismiss="modal">
+              Go back
+            </button>
+            <button type="submit" name="addQuiz" class="btn btn-primary">Add Quiz</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
+  <!-- Add Modal 3 -->
+  <div class="modal fade" id="addQuiz3" tabindex="-1" aria-labelledby="ModalLabel3" aria-hidden="true"
+    style="padding: 2rem;">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="width: 602px;height: 412px!important;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ModalLabel2" style="color: black; font-size:2rem;">Identification</h5>
+          <button type="button" style="border: none; background:none; padding: 0 0.5rem;" data-bs-dismiss="modal"
+            aria-label="Close">&times;</button>
+        </div>
+        <form action="quiz_add.php" method="post" id="secondForm">
+          <div class="modal-body d-flex flex-column align-content-between">
+            <div>
+              <p>Instruction: This is an identification. The system will check if the input of the student is the same
+                as the answer regardless of the letter case</p>
+            </div>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Question" name="question" aria-label="Question">
+            </div>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Answer" name="answer" aria-label="Answer">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-target="#addQuiz" data-bs-toggle="modal"
+              data-bs-dismiss="modal">
+              Go back
+            </button>
+            <button type="submit" name="addQuiz" class="btn btn-primary">Add Quiz</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+    integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+    crossorigin="anonymous"></script>
 
-
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <script type="text/javascript">
-    $('#myTab a').on('click', function(e) {
+    var lesson = document.getElementById('lessonId').value;
+    var difficulty = 'easy';
+    var quizName = document.getElementById('quizId').value;
+
+    const selectDifficulty = document.getElementById('difficultyId');
+    const selectLesson = document.getElementById('lessonId');
+    const NEXTBUTTON = document.getElementById('nextBtn');
+
+    // Add an event listener for the 'change' event
+    selectDifficulty.addEventListener('change', function () {
+      // Get the selected value
+      var selectedValue = selectDifficulty.value;
+
+      // Do something with the selected value, e.g., set it to a variable
+      difficulty = selectedValue;
+
+      // You can now use the 'difficulty' variable as needed
+      console.log("Selected difficulty: " + difficulty);
+    });
+
+    selectLesson.addEventListener('change', function () {
+      // Get the selected value
+      var selectedValue = selectLesson.value;
+
+      // Do something with the selected value, e.g., set it to a variable
+      lesson = selectedValue;
+
+      // You can now use the 'difficulty' variable as needed
+      console.log("Selected lesson: " + lesson);
+    });
+
+
+    // Add a click event listener to the button
+    NEXTBUTTON.addEventListener("click", function () {
+      quizName = document.getElementById('quizId').value;
+
+      if (quizName === '' || quizName === null || quizName === undefined) {
+        alert("Please enter a quiz name.");
+        return;
+      }
+
+      if (difficulty == 'easy') {
+        $('#addQuiz').modal('hide');
+        $('#addQuiz2').modal('show');
+      } else if (difficulty == 'medium') {
+        $('#addQuiz').modal('hide');
+        $('#addQuiz2').modal('show');
+      } else if (difficulty == 'hard') {
+        $('#addQuiz').modal('hide');
+        $('#addQuiz3').modal('show');
+      }
+
+    });
+
+    document.getElementById("secondForm").addEventListener("submit", function (event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      // Get form data
+      var formData = new FormData(this);
+      var addButton = this.querySelector('[name="addQuiz"]');
+
+      formData.append("submitButtonName", addButton.name);
+
+      // Add additional data to the FormData object
+      formData.append("lesson", lesson);
+      formData.append("difficulty", difficulty);
+
+      // Process the form data here using JavaScript
+      var question = formData.get("question");
+      var option1 = formData.get("option1");
+      var option2 = formData.get("option2");
+      var option3 = formData.get("option3");
+      var option4 = formData.get("option4");
+      var answer = formData.get("answer");
+
+      // You can perform additional validation or processing here
+
+      // Send the processed data to a PHP script using an AJAX request
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "test.php", true);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      var formDataString = Array.from(formData.entries()).map(entry => {
+        console.log(entry[1]);
+        return encodeURIComponent(entry[0]) + "=" + encodeURIComponent(entry[1]);
+      }).join("&");
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          // Handle the response from the PHP script here
+          console.log(xhr.responseText);
+        }
+      };
+
+      xhr.send(formDataString); 
+    });
+
+
+
+    $('#myTab a').on('click', function (e) {
       e.preventDefault()
       $(this).tab('show')
     });
@@ -628,35 +529,17 @@ $diff_list = $quiz->display_quiz_difficulty();
 
       }
     }
-    // javascript validation function
-    // =============================================================================================================
+    // Modal show
+    jQuery(document).ready(function ($) {
+      $(".clickable-row").click(function () {
+        $("#modalAction").modal("show");
+      });
+    });
 
-
-    // =============================================================================================================
-
-    // javascript modal function called on page load
-
-    function display_modal() {
-
-
-
-    }
-
-    // =============================================================================================================
-
-
-
-    // =============================================================================================================
-
-    // javascript modal function called on page load
-
-    $(window).on('load', function() {
+    $(window).on('load', function () {
       $('#myModal').modal('show');
     });
 
-
-    // javascript validation function
-    // =============================================================================================================
   </script>
 
 

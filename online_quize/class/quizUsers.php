@@ -111,7 +111,7 @@ class quizUsers
 
 	public function show_users_profile($email)  		 //function to diaplay the users profile
 	{
-		$query=$this->conn->query("select * from users where email='$email'");
+		$query=$this->conn->query("select * from user_info where email='$email'");
 		$row=$query->fetch_array(MYSQLI_ASSOC);
 
 		if ($query->num_rows>0) 
