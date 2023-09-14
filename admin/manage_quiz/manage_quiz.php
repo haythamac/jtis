@@ -196,14 +196,15 @@ $diff_list = $quiz->display_quiz_difficulty();
 
 
               mysqli_select_db($con, 'jtis');
-              $q = "SELECT a.assessment_id, a.name, a.lesson, a.difficulty, u.firstName, u.lastName
+              $q = "SELECT a.assessment_id, a.assessment_name, a.lesson, a.difficulty, u.firstName, u.lastName
                   FROM assessment AS a
-                  INNER JOIN leaderboard AS l ON a.leaderboard_id = l.leaderboard_id
-                  INNER JOIN user_info AS u ON l.user_id = u.user_id;";
+                  LEFT JOIN leaderboard AS l ON a.leaderboard_id = l.leaderboard_id
+                  LEFT JOIN user_info AS u ON l.user_id = u.user_id;";
+              $q2 = "SELECT * FROM assessment";
+              // $q = "SELECT * FROM assessment";
               $result = mysqli_query($con, $q);
+              
               while ($res = mysqli_fetch_array($result)) {
-
-
                 ?>
 
                 <tr class=" ">
@@ -211,7 +212,7 @@ $diff_list = $quiz->display_quiz_difficulty();
                     <?php echo $res['assessment_id']; ?>
                   </td>
                   <td>
-                    <?php echo ucfirst($res['name']); ?>
+                    <?php echo ucfirst($res['assessment_name']); ?>
                   </td>
                   <td>
                     <?php echo ucfirst($res['lesson']); ?>
@@ -220,7 +221,7 @@ $diff_list = $quiz->display_quiz_difficulty();
                     <?php echo ucfirst($res['difficulty']); ?>
                   </td>
                   <td>
-                    <?php echo ucfirst($res['firstName']) . ' ' . ucfirst($res['lastName']); ?>
+                    <?php echo (isset($res['firstName']) && isset($res['lastName'])) ? ucfirst($res['firstName']) . ' ' . ucfirst($res['lastName']) : "<span style='color: red;'>No record yet</span>"; ?>
                   </td>
                   <td><a href="edit_quiz.php">Update</a></td>
                   <td><a class=" no-gutters text-danger"
@@ -337,8 +338,8 @@ $diff_list = $quiz->display_quiz_difficulty();
             </div>
             <div class="form-group">
               <label for="answer">Answer</label>
-              <select class="form-control" id="answer">
-                <option value="1">1</option>
+              <select class="form-control" name="answer" id="answer">
+                <option value="1" selected>1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
@@ -470,6 +471,7 @@ $diff_list = $quiz->display_quiz_difficulty();
       // Add additional data to the FormData object
       formData.append("lesson", lesson);
       formData.append("difficulty", difficulty);
+      formData.append("quizName", quizName);
 
       // Process the form data here using JavaScript
       var question = formData.get("question");
