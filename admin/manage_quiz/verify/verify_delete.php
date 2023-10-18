@@ -15,7 +15,7 @@ if (isset($_GET['id'])) {
     }
 
     // Construct the delete query
-    $query = "DELETE FROM question_quiz WHERE id = '$id'";
+    $query = "DELETE FROM assessment WHERE assessment_id = '$id'";
 
     // Execute the delete query
     if (mysqli_query($con, $query)) {

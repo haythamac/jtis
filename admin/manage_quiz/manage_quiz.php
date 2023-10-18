@@ -179,7 +179,8 @@ $diff_list = $quiz->display_quiz_difficulty();
           <div class="col-lg-12">
             <h3 class="text-center mt-2 editlesson">Manage Quiz</h3><br>
             <div><span class="clickable-modal" style="cursor: pointer; color: blue;" data-bs-toggle="modal"
-                data-bs-target="#addQuiz">Add quiz</span></div>
+                data-bs-target="#addQuiz">Add quiz</span>
+            </div>
             <table class="table table-striped table-hover shadow table-bordered" id="delete_question">
 
               <tr class="font-weight-bold">
@@ -196,10 +197,11 @@ $diff_list = $quiz->display_quiz_difficulty();
 
 
               mysqli_select_db($con, 'jtis');
-              $q = "SELECT a.assessment_id, a.assessment_name, a.lesson, a.difficulty, u.firstName, u.lastName
+              $q = "SELECT a.assessment_id, a.assessment_name, sb.language_name, a.difficulty, u.firstName, u.lastName
                   FROM assessment AS a
                   LEFT JOIN leaderboard AS l ON a.leaderboard_id = l.leaderboard_id
-                  LEFT JOIN user_info AS u ON l.user_id = u.user_id;";
+                  LEFT JOIN user_info AS u ON l.user_id = u.user_id
+                  LEFT JOIN science_branch AS sb ON a.lesson = sb.id;";
               $q2 = "SELECT * FROM assessment";
               // $q = "SELECT * FROM assessment";
               $result = mysqli_query($con, $q);
@@ -215,7 +217,7 @@ $diff_list = $quiz->display_quiz_difficulty();
                     <?php echo ucfirst($res['assessment_name']); ?>
                   </td>
                   <td>
-                    <?php echo ucfirst($res['lesson']); ?>
+                    <?php echo ucfirst($res['language_name']); ?>
                   </td>
                   <td>
                     <?php echo ucfirst($res['difficulty']); ?>
@@ -223,7 +225,7 @@ $diff_list = $quiz->display_quiz_difficulty();
                   <td>
                     <?php echo (isset($res['firstName']) && isset($res['lastName'])) ? ucfirst($res['firstName']) . ' ' . ucfirst($res['lastName']) : "<span style='color: red;'>No record yet</span>"; ?>
                   </td>
-                  <td><a href="edit_quiz.php">Update</a></td>
+                  <td><a href="edit_quiz.php?id=<?php echo $res['assessment_id']; ?>">Update</a></td>
                   <td><a class=" no-gutters text-danger"
                       href="verify/verify_delete.php?id=<?php echo $res['assessment_id']; ?>"
                       style="text-decoration: none;">Delete<i class="fa fa-trash-o ml-2" aria-hidden="true"></a></td>
@@ -369,17 +371,17 @@ $diff_list = $quiz->display_quiz_difficulty();
           <button type="button" style="border: none; background:none; padding: 0 0.5rem;" data-bs-dismiss="modal"
             aria-label="Close">&times;</button>
         </div>
-        <form action="quiz_add.php" method="post" id="secondForm">
+        <form action="quiz_add.php" method="post" id="thirdForm">
           <div class="modal-body d-flex flex-column align-content-between">
             <div>
               <p>Instruction: This is an identification. The system will check if the input of the student is the same
                 as the answer regardless of the letter case</p>
             </div>
             <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Question" name="question" aria-label="Question">
+              <input type="text" class="form-control" placeholder="Question" name="questionHard" aria-label="Question">
             </div>
             <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Answer" name="answer" aria-label="Answer">
+              <input type="text" class="form-control" placeholder="Answer" name="answerHard" aria-label="Answer">
             </div>
           </div>
           <div class="modal-footer">
@@ -387,7 +389,7 @@ $diff_list = $quiz->display_quiz_difficulty();
               data-bs-dismiss="modal">
               Go back
             </button>
-            <button type="submit" name="addQuiz" class="btn btn-primary">Add Quiz</button>
+            <button type="submit" name="addQuizHard" class="btn btn-primary">Add Quiz</button>
           </div>
         </form>
       </div>
@@ -479,6 +481,44 @@ $diff_list = $quiz->display_quiz_difficulty();
       var option2 = formData.get("option2");
       var option3 = formData.get("option3");
       var option4 = formData.get("option4");
+      var answer = formData.get("answer");
+
+      // You can perform additional validation or processing here
+
+      // Send the processed data to a PHP script using an AJAX request
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "test.php", true);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      var formDataString = Array.from(formData.entries()).map(entry => {
+        console.log(entry[1]);
+        return encodeURIComponent(entry[0]) + "=" + encodeURIComponent(entry[1]);
+      }).join("&");
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          // Handle the response from the PHP script here
+          console.log(xhr.responseText);
+        }
+      };
+
+      xhr.send(formDataString); 
+    });
+
+    document.getElementById("thirdForm").addEventListener("submit", function (event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      // Get form data
+      var formData = new FormData(this);
+      var addButton = this.querySelector('[name="addQuizHard"]');
+
+      formData.append("submitButtonName", addButton.name);
+
+      // Add additional data to the FormData object
+      formData.append("lesson", lesson);
+      formData.append("difficulty", difficulty);
+      formData.append("quizName", quizName);
+
+      // Process the form data here using JavaScript
+      var question = formData.get("question");
       var answer = formData.get("answer");
 
       // You can perform additional validation or processing here
